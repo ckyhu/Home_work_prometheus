@@ -1,0 +1,25 @@
+groups:
+  - name: docker_container_node_fsk
+    rules:
+       # This rule can be very noisy in dynamic infra with legitimate container start/stop/deployment.
+     - alert: ContainerDown
+       expr: absent(container_last_seen{job="node-fsk-docker-container",container_label_com_docker_compose_service="webserver"}) or absent(container_last_seen{job="node-fsk-docker-container",container_label_com_docker_compose_service="wordpress"}) or absent({job="node-fsk-docker-container",container_label_com_docker_compose_service="db"})
+       for: 0m
+       labels:
+         severity: critical
+       annotations:
+         summary: Container {{ $labels.job }}
+         description: "A container is down  VALUE = {{ $value }}\n  NAME = {{ $labels.container_label_com_docker_compose_service }}"
+
+
+  - name: CMS
+    rules:
+     - alert: BlackboxProbeFailed
+       expr: probe_success == 0
+       for: 0m
+       labels:
+         severity: critical
+       annotations:
+         summary: Blackbox probe failed {{ $labels.instance }}
+         description: "Probe failed\n  VALUE = {{ $value }}\n  LABELS = {{ $labels.job }}"
+
