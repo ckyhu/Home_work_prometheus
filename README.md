@@ -148,8 +148,8 @@ services:
     - --store=bolt
     - --bolt.path=/data/bot.db
     environment:
-      TELEGRAM_ADMIN: "255490632"
-      TELEGRAM_TOKEN: 5234436431:AAHAp1ZGoDngUp-6Btps7PpqdOJ1ZPf0jXc
+      TELEGRAM_ADMIN: ""
+      TELEGRAM_TOKEN: 
     networks:
       - prom
 
@@ -209,14 +209,14 @@ server {
         }
 
         location /node-metrics {
-                proxy_pass http://10.43.2.66:9100/metrics;
+                proxy_pass http://10.4.2.66:9100/metrics;
                 auth_basic "nginx";
                 auth_basic_user_file "/etc/nginx/.htpasswd";
         }
 
 
         location /docker-metrics {
-                proxy_pass http://10.43.2.66:8080/metrics;
+                proxy_pass http://10.4.2.66:8080/metrics;
                 auth_basic "nginx";
                 auth_basic_user_file "/etc/nginx/.htpasswd";
         }
