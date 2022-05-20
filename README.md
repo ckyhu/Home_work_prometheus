@@ -275,5 +275,5 @@ count(rate(container_last_seen{job="node-fsk-docker-container",container_label_c
 #### 4. Задание со * 2
 На dashbord'е [DrillDown](/GAP-2/dashboard-drilldown/drilldown.jpg) избражена сводная информация по docker хосту и стеку CMS. При нажатии на панели **Load CPU in Host** и **RAM used** происходит переход в dashbord **infra** с более детальной информацией, для работы данной функции была использована **Data Links** в свойствах панели.
 При наведении курсора на панели **Container running in host** и **Container stack CMS memory usege** в верхнем углу есть ссылка на dashbord **infra**.
-
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/dashboard-drilldown/link.jpg)
 
