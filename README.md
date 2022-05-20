@@ -270,3 +270,5 @@ count(rate(container_last_seen{job="node-fsk-docker-container",container_label_c
 
 оповещение в **Telegram**
 ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/Alert/telegram.jpg)
+
+#### 4. Задание со * 2
