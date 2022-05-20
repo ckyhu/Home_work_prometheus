@@ -238,3 +238,26 @@ server {
 }
 
 ```
+# Home_work_grafana
+#### 1. На виртуальной машине 2-HV, с помощью модифицированного docker-compose был развернут и добавлен в стек Grafana:
+   - Prometheus
+   - Blackbox-exporter
+   - Alertmanager
+   - Telegram-bot
+   - **Garafana**
+```
+...
+service:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - prom
+    restart: always
+```
+#### 2. 
+Исходя из задания были созданны две папки infra и app, с вложенными dashbord'ами [infra](/GAP-2/dashboard-infra/infra) и [app](/GAP-2/dashboard-app/app)
