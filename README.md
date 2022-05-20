@@ -262,11 +262,11 @@ service:
 #### 2. Исходя из задания были созданны две папки infra и app, с вложенными dashbord'ами [infra](/GAP-2/dashboard-infra/infra.jpg) и [app](/GAP-2/dashboard-app/app.jpg)
 #### 3. Задание со * 1
 С помощью dashbord'а **app** и панели **Container running** 
-Query
 ```
 count(rate(container_last_seen{job="node-fsk-docker-container",container_label_com_docker_compose_project="wordpress"}[1m])) by (instance)
 ```
-был настроен **Alert**
+был настроен **Alert**, если умрет один и контейнеров стека CMS то будет отправлено 
 ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/Alert/alert.jpg)
 
-с оповещением в **Telegram
+оповещение в **Telegram**
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/Alert/telegram.jpg)
