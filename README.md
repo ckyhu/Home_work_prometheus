@@ -267,3 +267,6 @@ Query
 count(rate(container_last_seen{job="node-fsk-docker-container",container_label_com_docker_compose_project="wordpress"}[1m])) by (instance)
 ```
 был настроен **Alert**
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/Alert/alert.jpg)
+
+с оповещением в **Telegram
