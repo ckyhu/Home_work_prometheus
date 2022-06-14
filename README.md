@@ -244,7 +244,7 @@ server {
    - Blackbox-exporter
    - Alertmanager
    - Telegram-bot
-   - **Garafana**
+   - **Grafana**
 ```
 ...
 service:
