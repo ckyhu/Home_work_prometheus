@@ -239,7 +239,7 @@ server {
 
 ```
 # Home_work_grafana
-#### 1. На виртуальной машине 2-HV, с помощью модифицированного docker-compose был развернут и добавлен в стек Grafana:
+#### 1. На виртуальной машине 2-HV, с помощью модифицированного docker-compose был развернут и добавлен в стек контейнер "Grafana":
    - Prometheus
    - Blackbox-exporter
    - Alertmanager
