@@ -375,5 +375,7 @@ output {
  stdout { codec => rubydebug}
 }
 ```
-#### 3. Проверка создания index'а в elasticsearch
-![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2
+#### 3. Проверка создания index'а в elasticsearch:
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-3/index.jpg)
+#### 4. Создание визуализации в kibana:
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-3/dashboard.jpg)
