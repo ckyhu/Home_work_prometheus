@@ -276,4 +276,104 @@ count(rate(container_last_seen{job="node-fsk-docker-container",container_label_c
 На dashbord'е [DrillDown](/GAP-2/dashboard-drilldown/drilldown.jpg) избражена сводная информация по docker хосту и стеку CMS. При нажатии на панели **Load CPU in Host** и **RAM used** происходит переход в dashbord **infra** с более детальной информацией, для работы данной функции была использована **Data Links** в свойствах панели.
 При наведении курсора на панели **Container running in host** и **Container stack CMS memory usege** в верхнем углу есть ссылка на dashbord **infra**.
 ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2/dashboard-drilldown/link.jpg)
+# Home_work_ELK
+#### 1. На виртуальной машине 3-HV, с помощью docker-compose был развернут стек ELK (elasticsearch, logstash, kibana):
+```
+version: "3.0"
+services:
+  elasticsearch:
+    container_name: elastic
+    image: elasticsearch:8.0.0
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - elastic
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - data8.0:/usr/share/elasticsearch/data
+      - /etc/localtime:/etc/localtime
+      #- ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
 
+  kibana:
+    container_name: kibana
+    image: kibana:8.0.0
+    environment:
+      - ELASTICSEARCH_URL=http://elastic:9200
+      - ELASTICSEARCH_HOSTS=http://elastic:9200
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+    volumes:
+      - /etc/localtime:/etc/localtime
+
+  logstash:
+    image: logstash:8.0.0
+    container_name: logstash
+    ports:
+      - 5044:5044
+      - 5066:5066
+    environment:
+      LS_JAVA_OPTS: "-Xms1g -Xmx1g"
+    command: --config.reload.automatic
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./logstash/data:/usr/share/logstash/data:rw
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/conf.d/:/usr/share/logstash/conf.d/
+    networks:
+      - elastic
+
+volumes:
+    data8.0:
+      driver: local
+
+networks:
+   elastic:
+```
+#### 2. Для задания по отправке логов sshd в elasticsearch через logstash, был модифицирован конфиг rsyslog,ssh и logstash.
+sshd_config:
+```
+# Logging
+SyslogFacility local0
+```
+rsyslog.conf:
+```
+...
+*.* @@10.43.2.65:5044
+local0.*   /var/log/sshd.log
+```
+logstash.yml:
+```
+path.config: /usr/share/logstash/conf.d/*.conf
+path.logs: /var/log/logstash
+
+input {
+    syslog {
+     port => 5044
+   }
+}
+
+output {
+ elasticsearch {
+  hosts => ["elastic:9200"]
+  index => "sshd_log-%{+YYYY.MM}"
+ }
+ stdout { codec => rubydebug}
+}
+```
+#### 3. Проверка создания index'а в elasticsearch
+![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-2
