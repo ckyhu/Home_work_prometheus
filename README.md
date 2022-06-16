@@ -480,4 +480,7 @@ processors:
   - add_docker_metadata: ~
   ```
   #### 4. Результаты полученных данных отображенных в Kibana:
-  
+  ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-4/filebeat-docker.jpg)
+  ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-4/filebeat-sshd.jpg)
+  ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-4/heartbeat.jpg)
+  ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-4/metricbeat.jpg)
