@@ -379,3 +379,105 @@ output {
 ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-3/index.jpg)
 #### 4. Создание визуализации в kibana:
 ![alt text](https://github.com/ckyhu/Home_work_prometheus/blob/main/GAP-3/dashboard.jpg)
+# Home_work_Beats
+#### 1. Следуя заданию, в котором говориться, Heartbeat должен проверять доступность следующих ресурсов: otus.ru, google.com. На виртуальной машине 3-HV был установлен Heartbeat, его конфигурация:
+```
+heartbeat.config.monitors:
+  path: ${path.config}/monitors.d/*.yml
+  reload.enabled: false
+  reload.period: 5s
+
+heartbeat.monitors:
+
+- type: http
+  id: otus
+  name: otus
+  enabled: true
+  schedule: '@every 30s'
+  urls: ["https://otus.ru"]
+
+- type: http
+  id: google
+  name: google
+  enabled: true
+  schedule: '@every 30s'
+  urls: ["https://google.com"]
+
+output.logstash:
+  enabled: true
+  hosts: ["10.43.2.65:5044"]
+
+setup.kibana:
+  host: "10.43.2.65:5601"
+```
+#### 2. В следующем задании необхоимо настроить Metricbeat для получения метрик на основе показателей загрузки процессора и оперативной памяти, его конфигурация:
+```
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+setup.dashboards.enabled: true
+
+setup.kibana:
+  host: "10.43.2.65:5601"
+
+output.logstash:
+  hosts: ["10.43.2.65:5044"]
+
+processors:
+  - add_host_metadata: ~
+  - add_docker_metadata: ~
+  ```
+  modules.d/system.yml:
+  ```
+  - module: system
+  period: 10s
+  metricsets:
+    - cpu
+    - load
+    - memory
+  process.include_top_n:
+    by_cpu: 5
+    by_memory: 5   
+```
+#### 3. Для сбора логов ssh сервера был настроен Filebeat, его конфигурация:
+```
+filebeat.inputs:
+- type: filestream
+  enabled: true
+  paths:
+    - /var/log/sshd.log
+  tags: ["sshd"]
+
+- type: container
+  enabled: true
+  stream: stdout
+  paths: 
+    - '/var/lib/docker/containers/*/*.log'
+  tags: ["docker"]
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+
+setup.kibana:
+  host: "10.43.2.65:5601"
+
+output.logstash:
+  hosts: ["10.43.2.65:5044"]
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_docker_metadata: ~
+  ```
+  #### 4. Результаты полученных данных отображенных в Kibana:
+  
